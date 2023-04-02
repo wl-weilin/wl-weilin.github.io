@@ -1,0 +1,46 @@
+# Site settings
+# name在顶部显示
+name: WeiLin's Blog
+
+email: 1234@qq.com
+author: Wei Lin
+
+# url为个人网站
+url: http://www.1234.com
+
+# resume_site为个人简历网站
+resume_site: http://www.1234.com/
+
+# 个人的github地址
+github: https://github.com/username
+
+# baseurl为项目名，如果项目是"username.github.io"，则设置为""
+baseurl: ""
+
+# 博客的简单描述，在"name"项下
+description: Actually, less is more!
+
+
+meta_description: 康志华;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休
+motto: It's our wits that make us men.
+banner: 学而不思则罔，思而不学则殆。
+
+#permalink: /:categories/:year/:month/:day/:title/
+permalink: /:year/:month/:day/:title/
+paginate: 10
+
+exclude: ['README.md', 'Gemfile.lock', 'Gemfile', 'Rakefile']
+
+# github用户名
+github_username: wl-weilin
+
+# Build settings
+markdown: kramdown
+
+# 设置统计，选择baidu_analysis或evolvermaps一项即可
+# 在百度统计官网[https://tongji.baidu.com/]申请自己的网站ID并在此处替换
+#baidu_analysis: 94be4b0f9fc5d94cc0d0415ea6761ae9
+# 在revolvermaps [http://www.revolvermaps.com/?target=setupgl]申请自己的网站ID并在此处替换
+#revolvermaps: 5ytn1ssq6za
+
+plugins: [jekyll-paginate]
