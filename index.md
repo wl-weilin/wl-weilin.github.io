@@ -22,7 +22,7 @@ AMS相关知识
 
 # Android应用
 
-[Activity生命周期](http://127.0.0.1:4000/2021/08/20/Activity生命周期/)
+[Activity生命周期](https://www.weilin.space/2021-08/Activity生命周期/)
 
 
 
