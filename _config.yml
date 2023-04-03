@@ -2,6 +2,9 @@
 # name在顶部显示
 name: WeiLin's Blog
 
+# 博客的简单描述，在"name"项下
+description: Determination is power, faith is success!
+
 email: 1234@qq.com
 author: Wei Lin
 
@@ -12,22 +15,23 @@ url: http://www.1234.com
 resume_site: http://www.1234.com/
 
 # 个人的github地址
-github: https://github.com/wl-weilin
+github: https://github.com/username
 
 # baseurl为项目名，如果项目是"username.github.io"，则设置为""
 baseurl: ""
 
-# 博客的简单描述，在"name"项下
-description: Actually, less is more!
 
+meta_description: 魏林;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休
 
-meta_description: 康志华;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休
-motto: It's our wits that make us men.
+# 非主页标签下显示的座右铭
+motto: Determination is power, faith is success!
 banner: 学而不思则罔，思而不学则殆。
 
 #permalink: /:categories/:year/:month/:day/:title/
 permalink: /:year/:month/:day/:title/
-paginate: 10
+
+# 每页文章过多时，可以开启分页功能，设置每页展示的最大数
+#paginate: 10
 
 exclude: ['README.md', 'Gemfile.lock', 'Gemfile', 'Rakefile']
 
@@ -43,4 +47,4 @@ markdown: kramdown
 # 在revolvermaps [http://www.revolvermaps.com/?target=setupgl]申请自己的网站ID并在此处替换
 #revolvermaps: 5ytn1ssq6za
 
-plugins: [jekyll-paginate]
+#plugins: [jekyll-paginate]
