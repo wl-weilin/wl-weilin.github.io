@@ -29,7 +29,7 @@ banner: 学而不思则罔，思而不学则殆。
 
 # 设置网站内部链接格式，http://jekyllcn.com/docs/permalinks/
 #permalink: /:year/:month/:day/:title/
-permalink: /:year-:month/:title/
+permalink: /:year/:month/:title/
 
 # 每页文章过多时，可以开启分页功能，设置每页展示的最大数
 #paginate: 10
