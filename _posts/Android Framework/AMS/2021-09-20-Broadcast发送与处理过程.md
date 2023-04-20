@@ -29,6 +29,12 @@ Base on: Android 12
 
 Broadcast的注册过程指APP发送广播后，AMS将广播（BroadcastRecord）添加到广播队列的过程。
 
+## 流程图
+
+<div style="text-align: center">
+    <img src="/wl-docs/Android Framework/AMS/Broadcast发送与处理过程.svg" alt="AMS的Binder架构-非Aidl实现.jpg" style="zoom:100%" />
+</div>
+
 ## APP端发送广播
 
 ```java
