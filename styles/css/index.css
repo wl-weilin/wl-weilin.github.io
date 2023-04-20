@@ -6434,7 +6434,7 @@ hr {
   display: none;
 }
 .sidebar.affix {
-  position: static;
+  position: fixed;
 }
 /* First level of nav */
 .sidenav {
