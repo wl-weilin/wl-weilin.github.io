@@ -16,10 +16,10 @@
           <a href="{{ '/' | prepend: site.baseurl }}">Home</a>
         </li>
         <li>
-          <a href="{{ '/categories/' | prepend: site.baseurl }}">按时间查看</a>
+          <a href="{{ '/time/' | prepend: site.baseurl }}">按时间查看</a>
         </li>
         <li>
-          <a href="{{ '/tag' | prepend: site.baseurl }}">按标签查看</a>
+          <a href="{{ '/tag/' | prepend: site.baseurl }}">按标签查看</a>
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -29,7 +29,8 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">关于<b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a rel="nofollow" href="{{ '/books' | prepend: site.baseurl }}">我的书单</a></li>
+            <li><a rel="nofollow" href="{{ '/books/' | prepend: site.baseurl }}">我的书单</a></li>
+			<li><a rel="nofollow" href="{{ '/resume/' | prepend: site.baseurl }}">个人简历</a></li>
             <li class="divider"></li>
             <li><a rel="nofollow" target="_blank" href="{{site.github}}">Github</a></li>
           </ul>
