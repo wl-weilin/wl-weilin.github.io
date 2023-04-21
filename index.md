@@ -8,6 +8,8 @@ date: 2018-01-01 12:00:00 +0800
 
 * content
 {:toc}
+# 完善中...
+
 # Android Framework
 
 ## AMS
@@ -39,4 +41,4 @@ AMS相关知识
 
 
 
-# Github
+# Git使用
