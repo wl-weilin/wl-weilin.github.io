@@ -10,10 +10,10 @@ date:   2022-01-01
 categories: Git
 
 # 小类配置
-tag: AMS
+tag: Git-other
 
 # 设置文章置顶
-topping: Git文件说明
+topping: false
 
 # 资源根路径，该项在Jekyll网页显示时无用
 typora-root-url: ./..\..\..
