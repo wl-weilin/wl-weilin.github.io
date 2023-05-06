@@ -16,7 +16,7 @@ tag: java-other
 topping: false
 
 # 资源根路径，该项在Jekyll网页显示时无用
-typora-root-url: ./..\..\..
+typora-root-url: ./..\..
 ---
 
 * content
@@ -111,8 +111,9 @@ class B {
 当funcB()执行完成之后，会自动调用A中的callback()方法进行通知，而这个callback()方法就是一个回调方法，需要通过特定的方式注册到B中。
 
 <div style="text-align: center">
-    <img src="/wl-weilin.github.io/wl-docs/Java/others/回调示例图.png" style="zoom:80%" />
+    <img src="/wl-docs/Java/others/回调示例图.png" style="zoom:80%" />
 </div>
+
 
 ## 回调函数应用场景
 
