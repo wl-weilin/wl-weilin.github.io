@@ -3458,8 +3458,10 @@ textarea.input-group-sm > .input-group-btn > .btn {
 .navbar {
   position: relative;
   z-index: 1000;
-  min-height: 60px;
-  margin-bottom: 20px;
+  /* 修复：将head.html高度调小 */
+  /* 修改min-height: 60px; */
+  min-height: 40px;
+  margin-bottom: 0px;
   border: 1px solid transparent;
 }
 .navbar:before,
@@ -3614,7 +3616,8 @@ textarea.input-group-sm > .input-group-btn > .btn {
   float: left;
   padding: 20px 15px;
   font-size: 18px;
-  /* ԭֵline-height: 20px */
+  /* 修复：将Home按键左侧修改为文字后没有上下居中 */
+  /* 修改前line-height: 20px */
   line-height: 40px;
 }
 .navbar-brand:hover,
@@ -3692,8 +3695,10 @@ textarea.input-group-sm > .input-group-btn > .btn {
   }
   .navbar-nav > li > a,
   .docs-nav .navbar-nav > li > span {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    /* 修复：调整Home等按键宽度，将head.html宽度调小 */
+    /* 修改padding-top: 20px 至 10px，padding-bottom: 20px 至 10px */
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 }
 @media (min-width: 768px) {
@@ -5414,7 +5419,9 @@ button.close {
 body {
   position: relative;
   /* For scrollyspy */
-  padding-top: 50px;
+  /* 修复：改变head.html宽度后，与header.html之间有空白 */
+  /* 修改padding-top: 50px 为40px */
+  padding-top: 40px;
   /* Account for fixed navbar */
 }
 /* Keep code small in tables on account of limited space */
@@ -6086,9 +6093,10 @@ pre code {
 h1,
 h2,
 h3 {
+  /* 修复：点击左侧标题时，右侧文档内容标题被页头遮挡 */
+  /* 添加padding-top: 70px，修改margin-top: 30px 为 -30px*/
   padding-top: 70px;
-  margin-top: -50px;
-  /* ԭֵmargin-top: 30px; */
+  margin-top: -30px;
   margin-bottom: 15px;
 }
 *,
@@ -6352,7 +6360,8 @@ hr {
 @media (min-width: 992px) {
   .docs-header h1,
   .docs-header p {
-    /* ԭֵmargin-right: 38px; */
+    /* 修复：标题过长时换行的问题 */
+    /* 修改前margin-right: 380px; */
     margin-right: 0px;
   }
 }
@@ -6523,7 +6532,9 @@ hr {
   border-color: #111f36;
 }
 .docs-nav .container .navbar-brand {
-  margin: 12px 0 0;
+  /* 修复：将最左侧按键向上移，紧贴顶部 */
+  /* 修改margin: 12px 0 0; */
+  margin: 0px 0 0;
   width: 100px;
   padding: 0;
 }
