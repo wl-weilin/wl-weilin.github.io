@@ -6094,9 +6094,9 @@ h1,
 h2,
 h3 {
   /* 修复：点击左侧标题时，右侧文档内容标题被页头遮挡 */
-  /* 添加padding-top: 70px，修改margin-top: 30px 为 -30px*/
-  padding-top: 70px;
-  margin-top: -30px;
+  /* 添加padding-top: 50px，修改margin-top: 30px 为 -10px*/
+  padding-top: 50px;
+  margin-top: -10px;
   margin-bottom: 15px;
 }
 *,
