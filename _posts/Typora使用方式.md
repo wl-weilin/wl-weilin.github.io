@@ -1,13 +1,13 @@
 ---
 layout: post
 # 标题配置
-title:  Activity生命周期
+title:  Typora使用方式
 # 时间配置
-date:   2021-08-20
+date:   2018-01-01
 # 大类配置
-categories: Android-Framework
+categories: 其它
 # 小类配置
-tag: Activity
+tag: 其它
 # 设置文章置顶
 topping: true
 
