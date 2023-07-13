@@ -1,13 +1,18 @@
 ---
 layout: post
+
 # 标题配置
 title:  Typora使用方式
+
 # 时间配置
 date:   2018-01-01
+
 # 大类配置
 categories: 其它
+
 # 小类配置
 tag: 其它
+
 # 设置文章置顶
 topping: true
 
