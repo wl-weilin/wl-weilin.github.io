@@ -10,15 +10,9 @@ date: 2018-01-01 12:00:00 +0800
 {:toc}
 # 完善中...
 
-# Android Framework
+# Android Framewor
 
-## AMS
 
-AMS相关知识
-
-## 进程
-
-进程相关知识
 
 
 
@@ -28,16 +22,9 @@ AMS相关知识
 
 
 
-# Java系列
-
-
-
-
-# C++系列
-
-
-
 # 设计模式
+
+
 
 
 

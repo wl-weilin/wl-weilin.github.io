@@ -1,16 +1,16 @@
 ---
 layout: post
 # 标题配置
-title:  ContentProvider概述
+title:  ContentProvider-概述
 
 # 时间配置
-date:   2021-10-01
+date:   2022-10-01
 
 # 大类配置
 categories: Android-Framework
 
 # 小类配置
-tag: AMS
+tag: Framework-AMS
 
 # 设置文章置顶
 topping: false

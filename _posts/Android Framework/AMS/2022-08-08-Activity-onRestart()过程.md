@@ -744,3 +744,172 @@ public void activityResumed(IBinder token, boolean handleSplashScreenExit) {
 ```
 
 主要是设置ActivityRecord对象的状态，之后不会再回调到APP端。
+
+## (6)system&Home-onStop()
+
+### 创建ClientTransaction
+
+Stop流程开始执行是从之前的ActivityClientController.activityPaused(token)调用进来后开始的。在TaskFragment.resumeTopActivity()中，从mRootWindowContainer.ensureVisibilityAndConfig()进入到stop栈中。
+
+ 
+
+注：上一个Activity（Home）的onStop()和下一个Activity（ActivityDemo）的onResume()的生命周期调度都是从同一个system端的Binder线程调用过来的。只不过stop过程中间有一次消息传递，所以执行速度比resume略慢，体现在日志上就是wm_on_stop_called日志通常在wm_on_resume_called日志之后打印。
+
+ 
+
+(1)   堆栈
+
+```txt
+IActivityClientController$Stub.onTransact() ->
+ActivityClientController.activityPaused() ->
+ActivityRecord.activityPaused() ->
+TaskFragment.completePause() ->
+RootWindowContainer.ensureActivitiesVisible() ->
+RootWindowContainer.ensureActivitiesVisible() ->
+DisplayContent.ensureActivitiesVisible() ->
+WindowContainer.forAllRootTasks() ->
+WindowContainer.forAllRootTasks() ->
+WindowContainer.forAllRootTasks() ->
+WindowContainer.forAllRootTasks() ->
+WindowContainer.forAllRootTasks() ->
+WindowContainer.forAllRootTasks() ->
+WindowContainer.forAllRootTasks() ->
+// Consumer接口调用过程，构造于DisplayContent.ensureActivitiesVisible()
+Task.ensureActivitiesVisible() ->
+Task.forAllLeafTasks() ->
+Task.forAllLeafTasks() ->
+// Consumer接口调用过程，构造于Task.ensureActivitiesVisible()
+TaskFragment.updateActivityVisibilities() ->
+EnsureActivitiesVisibleHelper.process() ->
+EnsureActivitiesVisibleHelper.setActivityVisibilityState() ->
+ActivityRecord.makeInvisible() ->
+ActivityRecord.addToStopping() ->
+ActivityTaskSupervisor.scheduleIdle()
+```
+
+然后执行到ActivityTaskSupervisor.scheduleIdle()，给system中的本线程发送了一个IDLE_NOW_MSG。
+
+```java
+final void scheduleIdle() {
+    if (!mHandler.hasMessages(IDLE_NOW_MSG)) {
+        if (DEBUG_IDLE) Slog.d(TAG_IDLE, "scheduleIdle: Callers=" + Debug.getCallers(4));
+        mHandler.sendEmptyMessage(IDLE_NOW_MSG);
+    }
+}
+```
+
+接收到IDLE_NOW_MSG消息之后，执行堆栈如下，在ActivityRecord.stopIfPossible()中打印wm_stop_activity日志。
+
+```txt
+ActivityTaskSupervisor$ActivityTaskSupervisorHandler.handleMessage() ->
+ActivityTaskSupervisor$ActivityTaskSupervisorHandler.handleMessageInner() ->
+ActivityTaskSupervisor$ActivityTaskSupervisorHandler.activityIdleFromMessage() ->
+ActivityTaskSupervisor.activityIdleInternal() ->
+ActivityTaskSupervisor.processStoppingAndFinishingActivities() ->
+ActivityRecord.stopIfPossible() ->
+ClientLifecycleManager.scheduleTransaction() ->
+ClientLifecycleManager.scheduleTransaction() ->
+ClientTransaction.schedule()
+```
+
+(2)   ClientTransaction对象
+
+this的内容如下:
+
+- mActivityCallbacks = null；
+- mLifecycleStateRequest为一个StopActivityItem对象，之后APP端通过该对象执行onStop()；
+- 之后还会通过StopActivityItem.postExecute() -> ActivityClient.activityStopped()调用回system端。
+
+### 执行ClientTransaction
+
+执行之前system的Stop流程调用过来的ClientTransaction事务。
+
+ 
+
+这一次在TransactionExecutor.execute(transaction)中：
+
+- 不会执行executeCallbacks(transaction)，因为callbacks == null。
+- 执行executeLifecycleState(transaction)，取出StopActivityItem对象，调用到onStop()生命周期方法。
+- 最后通过ActivityClient.activityStopped()调用回system端。
+
+ 
+
+onStop()生命周期方法的调用过程：
+
+```txt
+TransactionExecutor.execute() ->
+TransactionExecutor.executeLifecycleState() ->
+ActivityTransactionItem.execute() ->
+StopActivityItem.execute() ->
+ActivityThread.handleStopActivity() ->
+ActivityThread.performStopActivityInner() ->
+ActivityThread.callActivityOnStop() ->
+Activity.performStop() ->
+Instrumentation.callActivityOnStop() ->
+Launcher.onStop()
+```
+
+### 调用到system
+
+(1)   创建StopInfo
+
+```txt
+TransactionExecutor.execute() ->
+TransactionExecutor.executeLifecycleState() ->
+ActivityTransactionItem.execute() ->
+StopActivityItem.execute() ->
+ActivityThread.handleStopActivity()
+```
+
+```java
+@Override
+public void handleStopActivity(ActivityClientRecord r, int configChanges,
+        PendingTransactionActions pendingActions, boolean finalStateRequest, String reason) {
+    r.activity.mConfigChangeFlags |= configChanges;
+
+    final StopInfo stopInfo = new StopInfo();
+    performStopActivityInner(r, stopInfo, true /* saveState */, finalStateRequest,
+            reason);
+
+    if (localLOGV) Slog.v(
+        TAG, "Finishing stop of " + r + ": win=" + r.window);
+
+    updateVisibility(r, false);
+
+    // Make sure any pending writes are now committed.
+    if (!r.isPreHoneycomb()) {
+        QueuedWork.waitToFinish();
+    }
+
+    stopInfo.setActivity(r);
+    stopInfo.setState(r.state);
+    stopInfo.setPersistentState(r.persistentState);
+    pendingActions.setStopInfo(stopInfo);
+    mSomeActivitiesChanged = true;
+}
+```
+
+(2)   发送StopInfo到Looper
+
+```txt
+TransactionExecutor.execute() ->
+TransactionExecutor.executeLifecycleState() ->
+StopActivityItem.postExecute() ->
+ActivityThread.reportStop()
+```
+
+```java
+public void reportStop(PendingTransactionActions pendingActions) {
+    mH.post(pendingActions.getStopInfo());
+}
+```
+
+(3)   执行StopInfo
+
+最后APP在ActivityClient.activityStopped()中调用到system中执行ActivityClientController.activityStopped()，主要是通知system端Stop执行完成，不会再调用到APP端。
+
+```txt
+PendingTransactionActions.StopInfo.run() ->
+ActivityClient.activityStopped()
+```
+

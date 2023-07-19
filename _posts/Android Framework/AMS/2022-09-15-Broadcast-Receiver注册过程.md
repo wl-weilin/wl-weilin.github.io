@@ -1,16 +1,16 @@
 ---
 layout: post
 # 标题配置
-title:  Broadcast Receiver注册过程
+title:  Broadcast-Receiver注册过程
 
 # 时间配置
-date:   2021-09-15
+date:   2022-09-15
 
 # 大类配置
 categories: Android-Framework
 
 # 小类配置
-tag: AMS
+tag: Framework-AMS
 
 # 设置文章置顶
 topping: false
@@ -24,6 +24,10 @@ typora-root-url: ./..\..\..
 
 
 # 动态注册Broadcast Receiver
+
+Base on: Android 13
+
+Branch: android-13.0.0_r30
 
 [Android S动态广播注册流程(广播1)——CSDN](https://blog.csdn.net/yun_hen/article/details/124415431) 
 
@@ -402,6 +406,8 @@ mRegisteredReceivers是一个HashMap，key为Receiver的IBinder代理对象（�
 final HashMap<IBinder, ReceiverList> mRegisteredReceivers = new HashMap<>();
 ```
 
+<br/>
+
 (2)   mReceiverResolver
 
 ​    mReceiverResolver存储的是所有动态注册的Receiver的BroadcastFilter（由IntentFilter构造而来）。是一个IntentResolver<BF, BF>对象。
@@ -414,6 +420,8 @@ final HashMap<IBinder, ReceiverList> mRegisteredReceivers = new HashMap<>();
 final IntentResolver<BroadcastFilter, BroadcastFilter> mReceiverResolver
         = new IntentResolver<BroadcastFilter, BroadcastFilter>() {...}
 ```
+
+<br/>
 
 (3)   两者关系
 

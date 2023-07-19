@@ -1,16 +1,16 @@
 ---
 layout: post
 # 标题配置
-title:  ContentProvider查询过程
+title:  ContentProvider-访问过程
 
 # 时间配置
-date:   2021-10-20
+date:   2022-10-08
 
 # 大类配置
 categories: Android-Framework
 
 # 小类配置
-tag: AMS
+tag: Framework-AMS
 
 # 设置文章置顶
 topping: false
@@ -108,6 +108,14 @@ ContentResolver.query(5 args) ->
 ContentResolver.query(6 args) ->
 ContentResolver.query(4 args)
 ```
+
+在ContentResolver.query(4 args)中，会依次请求不稳定的Provider连接与稳定的Provider连接。其中涉及到了一个unstableProvider和两个stableProvider，过程如下：
+
+- 首先定义IContentProvider unstableProvider和IContentProvider stableProvide在query()的函数内引用；
+- 获取到unstableProvider，并通过unstableProvider获取到qCursor；
+- 如果获取qCursor失败（发生异常），则通过IContentProvider stableProvide应用获取稳定连接（在catch块内）；
+- 如果未获取到stableProvide，则最后也要通过acquireProvider(uri)获取，由try{}内的局部变量IContentProvider provider持有引用；
+- 最后在finally{}中稳定连接和不稳定连接的计数均减1（注意函数内执行的不是释放连接，而是相关连接数=0后才释放，实际上是将连接数-1）。
 
 ```java
 @Override
@@ -661,3 +669,84 @@ ActivityThread.acquireProvider()
 ```
 
 其余过程同上。
+
+# 其它
+
+## CPH.getContentProviderImpl()流程图
+
+CPH=ContentProviderHelper
+
+<div style="text-align: center">
+    <img src="/wl-docs/Android Framework/AMS/ContentProvider访问过程1.svg" alt="ContentProvider访问过程1.svg" style="zoom:100%" />
+</div>
+
+## unstableProvider与stableProvide的区别
+
+具体在请求过程中的区别见getContentResolver().query()，另外Provider所在进程被杀后，对客户端进程的处理也有所区别。
+
+ 
+
+通过forceStopPackage()来杀掉 Provider所在进程的流程如下：
+
+```txt
+AMS.forceStopPackage() ->
+AMS.forceStopPackageLocked() ->
+AMS.forceStopPackageLocked() ->
+CPH.removeDyingProviderLocked()
+```
+
+在removeDyingProviderLocked()中：
+
+```java
+ProcessRecord capp = conn.client;
+final IApplicationThread thread = capp.getThread();
+// 如果有通过stable Provider连接的客户端
+if (conn.stableCount() > 0) {
+    final int pid = capp.getPid();
+    if (!capp.isPersistent() && thread != null
+            && pid != 0 && pid != ActivityManagerService.MY_PID) {
+        // 杀死客户端进程
+        capp.killLocked(
+                "depends on provider " + cpr.name.flattenToShortString()
+                        + " in dying proc " + (proc != null ? proc.processName : "??")
+                        + " (adj " + (proc != null ? proc.mState.getSetAdj() : "??") + ")",
+                ApplicationExitInfo.REASON_DEPENDENCY_DIED,
+                ApplicationExitInfo.SUBREASON_UNKNOWN,
+                true);
+    }
+} else if (thread != null && conn.provider.provider != null) {
+    // 如果只有通过unstable Provider连接的客户端
+    try {
+        // 则只是通知客户端，不会杀死客户端
+        thread.unstableProviderDied(conn.provider.provider.asBinder());
+    } catch (RemoteException e) {
+    }
+    // In the protocol here, we don't expect the client to correctly
+    // clean up this connection, we'll just remove it.
+    cpr.connections.remove(i);
+    if (cpr.proc != null && !hasProviderConnectionLocked(cpr.proc)) {
+        cpr.proc.mProfile.clearHostingComponentType(HOSTING_COMPONENT_TYPE_PROVIDER);
+    }
+    if (conn.client.mProviders.removeProviderConnection(conn)) {
+        mService.stopAssociationLocked(capp.uid, capp.processName,
+                cpr.uid, cpr.appInfo.longVersionCode, cpr.name, cpr.info.processName);
+    }
+}
+```
+
+所以区别就是：
+
+- 对于stableProvider，如果provider所在进程被杀，则客户端进程也会被杀；
+- 对于unstableProvider，如果provider所在进程被杀，则客户端只是移除Provider连接，并不会被杀掉。
+
+ 
+
+​    在执行query()的时候使用的是unstableProvider，但是返回给调用方的Curosr 使用的是stableProvider。这表示在 Cursor 没有被 close 之前，只要 provider所在进程死亡，则客户端进程也会被杀掉。
+
+## 为什么要区分是否稳定连接？
+
+ContentResolver只会在query()时使用unstableProvider，其它接口的调用inser()、delete()、update()、call()都只是使用stableProvider。
+
+之所以只在query()中使用unstableProvider，是因为只是查询数据，并不涉及写入，而手机中query()的调用也是最多的，所以需要先通过unstableProvider查看一下目标数据是否存在，如果不存在客户端进程也不会crash，如果存在并能正常访问再建立stableProvider。
+
+而如果像其它接口那样一开始就使用stableProvider，如果访问不到数据则会直接抛出异常，这对于使用较为频繁的query()来说是不可接受的。
