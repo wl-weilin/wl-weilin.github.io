@@ -10,15 +10,9 @@ date: 2018-01-01 12:00:00 +0800
 {:toc}
 # 完善中...
 
-# Android Framewor
+# Android Framework
 
 
-
-
-
-# Android应用
-
-[Activity生命周期](https://www.weilin.space/2021-08/Activity生命周期/)
 
 
 
