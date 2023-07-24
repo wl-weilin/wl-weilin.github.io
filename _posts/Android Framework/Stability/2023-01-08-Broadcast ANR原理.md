@@ -451,4 +451,94 @@ final void broadcastTimeoutLocked(boolean fromMsg) {
 
 # 广播ANR常见案例
 
-待更新
+## onReceive()处理耗时
+
+onReceive()中有耗时代码。
+
+相关日志：
+
+```txt
+#放弃向该filter发送广播
+06-16 19:32:48.322  1000  1605  2235 I am_broadcast_discard_filter: [0,145607189,com.example.broadcast.MY_BROADCAST1,0,217974802]
+#event log输出am_anr日志
+06-16 19:32:48.397  1605 30557 I am_anr  : [0,28740,com.demoapp.broadcastreceiver,552124230,Broadcast of Intent { act=com.example.broadcast.MY_BROADCAST1 flg=0x10000010 }]
+
+#发生ANR的进程被强制杀死
+06-16 19:32:48.578  1605 30557 I ActivityManager: Killing 28740:com.demoapp.broadcastreceiver/u0a257 (adj 700): bg anr
+06-16 19:32:48.579  1605 30557 I am_kill : [0,28740,com.demoapp.broadcastreceiver,700,bg anr]
+06-16 19:32:48.588  1605  2237 I libprocessgroup: Successfully killed process cgroup uid 10257 pid 28740 in 0ms
+06-16 19:32:48.706  1605  4817 I am_proc_died: [0,28740,com.demoapp.broadcastreceiver,700,15]
+06-16 19:32:48.708  1002  1002 I Zygote  : Process 28740 exited due to signal 9 (Killed)
+```
+
+主线程堆栈：
+
+```txt
+"main" prio=5 tid=1 Runnable
+  | group="main" sCount=0 ucsCount=0 flags=0 obj=0x72a21ed8 self=0xb400007869283c00
+  | sysTid=19440 nice=0 cgrp=default sched=0/0 handle=0x786a8e44f8
+  | state=R schedstat=( 10320304835 62606669 975 ) utm=521 stm=510 core=1 HZ=100
+  | stack=0x7fdf1d1000-0x7fdf1d3000 stackSize=8188KB
+  | held mutexes= "mutator lock"(shared held)
+  at com.demoapp.broadcastreceiver.MyReceiver.timeoutTask(MyReceiver.java:55)
+  at com.demoapp.broadcastreceiver.MyReceiver.onReceive(MyReceiver.java:35)
+  at android.app.LoadedApk$ReceiverDispatcher$Args.lambda$getRunnable$0$LoadedApk$ReceiverDispatcher$Args(LoadedApk.java:1707)
+  at android.app.LoadedApk$ReceiverDispatcher$Args$$ExternalSyntheticLambda0.run(unavailable:-1)
+  at android.os.Handler.handleCallback(Handler.java:938)
+  at android.os.Handler.dispatchMessage(Handler.java:99)
+  at android.os.Looper.loopOnce(Looper.java:211)
+  at android.os.Looper.loop(Looper.java:300)
+  at android.app.ActivityThread.main(ActivityThread.java:8258)
+  at java.lang.reflect.Method.invoke(Native method)
+  at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:556)
+  at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1049)
+```
+
+## SQLiteConnectionPool连接已满
+
+进程A请求数据库连接（数据库方面的问题通常搜索日志关键字“SQLiteConnectionPool”），但因为连接是有最大数量限制的，超出限制后其它进程再申请连接需要等待，于是此时进程A的主线程处于Waiting状态。如果此时收到了一个广播，主线程则无法处理，于是等待超时则发生ANR。
+
+其根本原因是主线程正在做其它事情，导致无法处理广播。需要APP自查原因。
+
+<br/>
+
+ANR日志：
+
+```txt
+11-17 16:37:32.012  1000  1861 19667 I am_anr  : [0,4495,android.process.acore,814267973,Broadcast of Intent \{ act=android.intent.action.LOCALE_CHANGED flg=0x11200010 cmp=com.android.providers.contacts/.LocaleChangeReceiver }] 
+```
+
+主线程堆栈：
+
+```txt
+"main" prio=5 tid=1 TimedWaiting
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x71ff98e8 self=0xb400007797d8a7b0
+  | sysTid=4495 nice=0 cgrp=default sched=0/0 handle=0x795638b4f8
+  | state=S schedstat=( 192470042 120264952 290 ) utm=9 stm=9 core=1 HZ=100
+  | stack=0x7fce6ba000-0x7fce6bc000 stackSize=8188KB
+  | held mutexes=
+  at sun.misc.Unsafe.park(Native method)
+  - waiting on an unknown object
+  at java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:230)
+  at android.database.sqlite.SQLiteConnectionPool.waitForConnection(SQLiteConnectionPool.java:756)
+  at android.database.sqlite.SQLiteConnectionPool.acquireConnection(SQLiteConnectionPool.java:380)
+  at android.database.sqlite.SQLiteSession.acquireConnection(SQLiteSession.java:896)
+  at android.database.sqlite.SQLiteSession.beginTransactionUnchecked(SQLiteSession.java:312)
+  at android.database.sqlite.SQLiteSession.beginTransaction(SQLiteSession.java:300)
+  at android.database.sqlite.SQLiteDatabase.beginTransaction(SQLiteDatabase.java:572)
+  at android.database.sqlite.SQLiteDatabase.beginTransaction(SQLiteDatabase.java:482)
+  at com.android.providers.contacts.ContactsProvider2$3.onPreAccountUpdated(ContactsProvider2.java:11114)
+  at miui.accounts.ExtraAccountManager$3.run(ExtraAccountManager.java:219)
+  at android.os.Handler.handleCallback(Handler.java:938)
+  at android.os.Handler.dispatchMessage(Handler.java:99)
+  at android.os.Looper.loopOnce(Looper.java:210)
+  at android.os.Looper.loop(Looper.java:299)
+  at android.app.ActivityThread.main(ActivityThread.java:8100)
+  at java.lang.reflect.Method.invoke(Native method)
+  at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:556)
+  at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1045)
+```
+
+## 其它情况
+
+部分三方手机厂商会有自己的APP限制策略，如冻结进程，禁用相关权限等，都会导致Receiver接收广播异常，从而导致ANR。

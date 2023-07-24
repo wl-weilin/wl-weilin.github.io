@@ -459,3 +459,63 @@ ProcessErrorStateRecord.appNotResponding()
 }
 ```
 
+# Service的ANR案例
+
+## **startForeground()使用不当**
+
+以下原因都会造成抛出ForegroundServiceDidNotStartInTimeException异常。
+
+<br/>
+
+(1)   未调用startForeground()
+
+在客户端调用startForegroundService()打开前台服务，但是未在服务端的service.onStartCommand()中调用startForeground(id,notification)，服务端在10s后会抛出异常并退出。
+
+抛出的错误为：
+
+```txt
+AndroidRuntime: android.app.ForegroundServiceDidNotStartInTimeException: Context.startForegroundService() did not then call Service.startForeground()。
+```
+
+<br/>
+
+(2)   onCreate()中调用startForeground()
+
+startForeground()一般需要在onStartCommand()方法里调用，而不是在Service的onCreate()中。如果在onCreate()中调用startForeground()，通常情况下并不会发生异常，但由于onCreate()只是在创建Service时调用一次，所以startForeground()也只会被调用一次，所以在某些情况下会发生错误。
+
+执行以下步骤可以复现异常：
+
+- 客户端A调用startForegroundService(intent)；
+- 服务端在onCreate()中调用startForeground()后，又调用了stopForeground(false|true)；
+- 客户端B再次调用startForegroundService(intent)，由于服务端Service已存在，所以不会调用startForeground()；
+- 最后服务端发生ForegroundServiceDidNotStartInTimeException异常而退出。
+
+<br/>
+
+(3)   调用startForeground()前耗时
+
+在onStartCommand()方法中按规范写了startForeground()，但是在执行startForeground()前有耗时代码。
+
+<br/>
+
+(4)   执行onStartCommand()延时
+
+startForeground()写在其中，最终也会导致startForeground()执行与延时，发生ForegroundServiceDidNotStartInTimeException错误。
+
+<br/>
+
+(5)   进程创建过程延时
+
+通过Service拉起进程，在执行进程创建过程中，主线程执行消息h=android.app.ActivityThread$H w=110延时，实际执行的是ActivityThread.handleBindApplication()，此时还没执行到创建Service那一步，但会导致后续代码执行延时。
+
+## 等锁耗时
+
+需要找到具体的等锁代码处才能发现根本原因，日志关键字"dvm_lock_sample"。
+
+## Binder线程池耗尽
+
+APP或system server的binder线程都处于忙碌状态，没有空余资源进行通信，等待了较长时间。
+
+## 其它原因
+
+三方设备厂商的自定义策略导致的，如进程冻结或权限等方面。
