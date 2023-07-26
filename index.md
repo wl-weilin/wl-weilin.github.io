@@ -26,7 +26,10 @@ Android 是由 Google 开发的一种移动操作系统，广泛应用于智能�
 
 | 文章 | 简述 |
 | --- | --- |
-| WebKit | 一套网页浏览器的软件引擎 |
+| [Android系统架构](https://www.weilin.space/2021/07/Android系统架构/) | 从内核驱动到应用级APP |
+| [AOSP-下载并编译源码](https://www.weilin.space/2021/07/AOSP-下载并编译源码/) | 如何从Google中下载源码并编译，最后从模拟器启动 |
+| [Android编译命令与原理](https://www.weilin.space/2021/07/Android编译命令与原理/) | 常用的编译源码的命令及相关模块 |
+| [Android系统分区](https://www.weilin.space/2021/07/Android系统分区/) | 传统分区结构、A/B分区结构以及SSI分区结构 |
 
 <br/>
 
@@ -47,7 +50,7 @@ Android 是由 Google 开发的一种移动操作系统，广泛应用于智能�
 | 文章 | 简述 |
 | --- | --- |
 | [消息机制原理](http://127.0.0.1:4000/2021/11/消息机制原理/) | Android消息机制的作用、成员及实现方式 |
-| [消息机制主要类](http://127.0.0.1:4000/2021/11/消息机制主要类/) |  |
+| [消息机制主要类](https://www.weilin.space/2021/11/消息机制主要类/) | Hanler、Looper、Message类及其使用方式 |
 
 <br/>
 
@@ -112,18 +115,106 @@ Android 是由 Google 开发的一种移动操作系统，广泛应用于智能�
 | --- | --- |
 | [Android进程概述](https://www.weilin.space/2022/12/进程-概述/) | Android进程管理架构、状态、级别等介绍 |
 | [Android进程启动过程](https://www.weilin.space/2022/12/进程启动过程/) | Android进程的启动过程，包括system端、Zygote和APP端 |
-| 四大组件拉起进程过程 |  |
+| 四大组件拉起进程过程 | 待更新 |
+
+<br/>
+
+(6) 稳定性系列
+| 稳定性                                                       | 简述 |
+| ------------------------------------------------------------ | ---- |
+| [ANR机制概述](https://www.weilin.space/2023/01/ANR机制概述/) |      |
+| [Input ANR原理](https://www.weilin.space/2023/01/Input-ANR原理/) |      |
+| [Service ANR原理](https://www.weilin.space/2023/01/Service-ANR原理/) |      |
+| [Provider 超时](https://www.weilin.space/2023/01/Provider超时/) |      |
+| [Android内存泄漏原因&检测工具](https://www.weilin.space/2023/01/Android内存泄漏原因&检测工具/) |      |
+| [Android常见内存泄漏总结](https://www.weilin.space/2023/01/Android常见内存泄漏总结/) |      |
+| [Watchdog原理](https://www.weilin.space/2023/01/Watchdog原理/) |      |
 
 
 
 
+(7) Framework其它模块
 
+| Input模块                                                    | 简述 |
+| ------------------------------------------------------------ | ---- |
+| [Input概述](https://www.weilin.space/2023/02/Input概述/)     |      |
+| [APP事件分发流程](https://www.weilin.space/2023/02/APP事件分发流程/) |      |
 
+| WindowManager模块                                            | 简述   |
+| ------------------------------------------------------------ | ------ |
+| [Window概述](https://www.weilin.space/2023/02/Window概述/)   |        |
+| [Window-创建到显示过程](https://www.weilin.space/2023/02/Window-创建到显示过程/) |        |
+| Window-移除过程                                              | 待更新 |
+
+| PackageManager模块                                           | 简述   |
+| ------------------------------------------------------------ | ------ |
+| [PackageManagerService 概述](https://www.weilin.space/2023/02/PackageManagerService概述/) |        |
+| [PackageManagerService 安装APK过程](https://www.weilin.space/2023/02/PKMS安装APK过程/) |        |
+| PackageManagerService 解析Intent                             | 待更新 |
 
 # 设计模式
 
+(1) 创建型模式
 
+| 创建型模式                                | 说明                                                         |
+| ----------------------------------------- | ------------------------------------------------------------ |
+| 工厂方法模式<br/>Factory Method Pattern   | 定义一个创建产品对象的工厂接口，将实际创建工作推迟到子类中。 |
+| 抽象工厂模式<br/>Abstract Factory Pattern | 提供一个创建一系列相关或者相互依赖的接口，而无需指定它们具体的类。 |
+| 建造者模式<br/>Builder Pattern            | 将一个复杂的构建与其表示相分离，使得同样的构建过程可以创建不同的表示。 |
+| 原型模式<br/>Prototype Pattern            | 用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。 |
+| 单例模式<br/>Singleton Pattern            | 保证一个类仅有一个实例，并提供一个访问它的全局访问点。       |
+
+ 
+
+<br/>
+
+(2) 结构型模式
+
+| 模式                             | 说明                                                         |
+| -------------------------------- | ------------------------------------------------------------ |
+| 适配器模式<br/>Adapter Pattern   | 将一个类的接口转换成客户希望的另外一个接口。使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。 |
+| 桥接模式<br/>Bridge Pattern      | 将抽象部分与实际部分分离，使它们都可以独立的变化。           |
+| 组合模式<br/>Composite Pattern   | 将对象组合成树形结构以表示“部分--整体”的层次结构。使得用户对单个对象和组合对象的使用具有一致性。 |
+| 装饰者模式<br/>Decorator Pattern | 动态的给一个对象添加一些额外的职责。就增加功能来说，此模式比生成子类更为灵活。 |
+| 外观模式<br/>Facade Pattern      | 为子系统中的一组接口提供一个一致的界面，此模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。 |
+| 享元模式<br/>Flyweight Pattern   | 以共享的方式高效的支持大量的细粒度的对象。                   |
+| 代理模式<br/>Proxy Pattern       | 为其他对象提供一种代理以控制对这个对象的访问。               |
+
+<br/>
+
+(2) 行为型模式
+
+| 模式                                           | 说明                                                         |
+| ---------------------------------------------- | ------------------------------------------------------------ |
+| 策略模式<br/>Strategy  Pattern                 | 定义了一系列算法，并将每个算法封装起来，使它们可以相互替换，且算法的改变不会影响算法的客户。 |
+| 模版模式<br/>Template  Pattern                 | 定义一个操作中的算法骨架，而将算法的一些步骤延迟到子类中，使得子类可以不改变该算法结构的情况下重定义该算法的某些特点步骤。 |
+| 观察者模式<br/>Observer  Pattern               | 多个对象间存在一对多的关系，当一个对象发生改变时，把这种改变通知给其他多个对象，从而影响其它对象的行为。 |
+| 状态模式<br/>State Pattern                     | 允许一个对象在其内部状态发生改变时改变其行为能力。           |
+| 备忘录模式<br/>Memento Pattern                 | 在不破坏封装性的前提下，获取并保存一个对象的内部状态，以便以后回复它。 |
+| 访问者模式<br/>Visitor Pattern                 | 在不改变集合元素的前提下，为一个集合中的每个元素提供多种访问方式，即每个元素有多个访问者对象。 |
+| 职责链模式<br/>Chain of Responsibility Pattern | 在该模式里，很多对象由每一个对象对其下家的引用而连接起来形成一条链。请求在这个链上传递，直到链上的某一个对象决定处理此请求，这使得系统可以在不影响客户端的情况下动态地重新组织链和分配责任。 |
+| 命令模式<br/>Command Pattern                   | 将一个请求封装为一个对象，从而使你可用不同的请求对客户端进行参数化；对请求排队或记录请求日志，以及支持可撤销的操作。 |
+| 解释器模式<br/>Interpreter Pattern             | 描述了如何为简单的语言定义一个语法，如何在该语言中表示一个句子，以及如何解释这些句子。 |
+| 迭代器模式<br/>Iterator  Pattern               | 提供了一种方法顺序来访问一个聚合对象中的各个元素，而又不需要暴露该对象的内部表示。 |
+| 中介者模式<br/>Mediator Pattern                | 定义一个中介对象来封装系列对象之间的交互。终结者使各个对象不需要显示的相互调用 ，从而使其耦合性松散，而且可以独立的改变他们之间的交互。 |
+| 备忘录模式<br/>Memento Pattern                 | 在不破坏封装的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。 |
 
 
 
 # Git使用
+
+| Git                                                          | 简述 |
+| ------------------------------------------------------------ | ---- |
+| [Git相关文件说明](https://www.weilin.space/2022/01/Git相关文件说明/) |      |
+| [git config 命令](https://www.weilin.space/2022/01/git-config命令/) |      |
+| [git add 命令](https://www.weilin.space/2022/01/git-add-命令/) |      |
+| [git branch 命令](https://www.weilin.space/2022/01/git-branch-命令/) |      |
+| [git checkout 命令](https://www.weilin.space/2022/01/git-checkout-命令/) |      |
+| [git commit 命令](https://www.weilin.space/2022/01/git-commit-命令/) |      |
+| [git fetch 命令](https://www.weilin.space/2022/01/git-fetch-命令/) |      |
+| [git merge 命令](https://www.weilin.space/2022/01/git-merge-命令/) |      |
+| [git pull 命令](https://www.weilin.space/2022/01/git-pull-命令/) |      |
+| [git push 命令](https://www.weilin.space/2022/01/git-push-命令/) |      |
+| [git rebase 命令](https://www.weilin.space/2022/01/git-rebase-命令/) |      |
+| [git remote 命令](https://www.weilin.space/2022/01/git-remote-命令/) |      |
+| [git reset 命令](https://www.weilin.space/2022/02/git-reset-命令/) |      |
