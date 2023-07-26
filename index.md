@@ -18,7 +18,7 @@ Android 是由 Google 开发的一种移动操作系统，广泛应用于智能�
 
 <br/>
 
-本人由于从事 Android Framework 方面的开发，对 Framework 相关的知识及组件比较了解，所以本博客内容也是讲解 Framework 方面的知识比较多一些（特别是AMS对四大组件的管理），同时也会涉及一些 APP 开发、Native 层、 Linux 内核及系统编译方面的内容。接下来是按不同模块对相关知识点的梳理，之后会不间断更新。
+本人由于从事 Android Framework 方面的开发，对 Framework 相关的知识及组件比较了解，所以本博客涉及的Android内容主要讲解 Framework 方面的知识多一些（特别是AMS对四大组件的管理），同时也会涉及一些 APP 开发、Native 层、 Linux 内核及系统编译方面的内容。接下来是按不同模块对相关知识点的梳理，之后会不间断更新。
 
 <br/>
 
