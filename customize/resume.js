@@ -1,8 +1,6 @@
 
 var AccessCode = [
-    { "key": "abcd", "start": "2023-01-01", "end": "2023-01-10" },
-    { "key": "efgh", "start": "2023-02-01", "end": "2023-02-10" },
-    { "key": "qazw", "start": "2023-05-01", "end": "2023-05-10" },
+    { "key": "08as", "start": "2023-07-01", "end": "2023-08-30" },
 ]
 
 loopy(AccessCode)
