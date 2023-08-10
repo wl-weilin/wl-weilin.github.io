@@ -24,13 +24,13 @@ typora-root-url: ./..\..\..
 {:toc}
 
 
-# **Binder实践-Native层**
+# Binder实践-Native层
 
 Base on: Android 11
 
 使用基于Native框架层提供的Binder库来开发一个Binder进程间通信应用实例，它包含一个Serveri进程和一个Client进程。 
 
-## **源码文件**
+## 源码文件
 
 <div style="text-align: center">
     <img src="/wl-docs/Android Framework/Binder/代码实践1.png" alt="代码实践1.png" style="zoom:80%" />
@@ -89,7 +89,7 @@ public:
 };
 ```
 
-## **IMyService.cpp**
+## IMyService.cpp
 
 ```c++
 #include "IMyService.h"
@@ -268,4 +268,3 @@ adb shell		# 进入shell
 <div style="text-align: center">
     <img src="/wl-docs/Android Framework/Binder/代码实践3.png" alt="Binder代码实践3.png" style="zoom:80%" />
 </div>
-
