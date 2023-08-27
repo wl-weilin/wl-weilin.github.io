@@ -106,6 +106,14 @@ public class MainActivity extends AppCompatActivity {
 <br/>
 段落2
 
+## 空格
+
+```txt
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+```
+
+
+
 ## 表格
 要添加表格，请使用三个或多个连字符（---）创建每列的标题，并使用管道（|）分隔每列。
 
