@@ -24,9 +24,9 @@ Android 是由 Google 开发的一种移动操作系统，广泛应用于智能�
 
 <br/>
 
-(1) Android 架构及编译：
+(1) Android 架构相关
 
-| 文章 | 简述 |
+| 架构及编译 | 简述 |
 | --- | --- |
 | [Android系统架构](https://www.weilin.space/2021/07/Android系统架构/) | 从内核驱动到应用级APP |
 | [AOSP-下载并编译源码](https://www.weilin.space/2021/07/AOSP-下载并编译源码/) | 如何从Google中下载源码并编译，最后从模拟器启动 |
