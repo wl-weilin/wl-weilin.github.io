@@ -42,7 +42,7 @@ typora-root-url: ./..
 | ------------------------------------------------------------ |
 | 部门：手机部-软件部-应用软件部-核心体验部-安卓框架组         |
 | 岗位：Android-Framework 软件开发工程师                       |
-| 工作内容简述：<br/>(1)  负责AMS模块的维护和开发工作，包括Activity、Service、ContentProvider及Broadcast四大组件<br/>(2)  其它与AMS相关的模块，包括进程启动、杀进程、多任务模块、Input、Package、Notification、Window等；<br/>(3)  Android稳定性相关问题，如ANR、Crash、内存泄漏、黑屏、应用卡顿等问题；<br/>(4)  小米便签APP的手写笔界面SDK维护及需求处理；<br/>(5)  其它：协助APP解决相关问题，临时处理其它代码需求，效率工具的维护及需求开发，培训应届生，组内作技术分享及输出文档等。 |
+| 工作内容简述：<br/>(1)  负责AMS模块的维护和开发工作，包括Activity、Service、ContentProvider及Broadcast四大组件<br/>(2)  其它与AMS相关的模块，包括进程启动、杀进程、多任务模块、Input、Package、Notification、Window、SystemUI、Settings等；<br/>(3)  Android稳定性相关问题，如ANR、Crash、内存泄漏、黑屏、应用卡顿等问题；<br/>(4)  小米便签APP的手写笔界面SDK维护及需求处理；<br/>(5)  其它：协助APP解决相关问题，临时处理其它代码需求，效率工具的维护及需求开发，培训应届生，组内作技术分享及输出文档等。 |
 
 
 
@@ -187,9 +187,9 @@ typora-root-url: ./..
 
 | 平行窗口适配                                                 |
 | ------------------------------------------------------------ |
-| 说明：部分APP未对平板设备的平行窗口模式做适配，会出现一些异常现象，需要对这些应用进行问题分析和配置修复。如常见提示页面、同意页面显示不全，有裁剪；应用权限弹窗显示不全；打开某些Activity，或横屏时，会出现闪退等问题。 |
-| 解决1：根据Top日活清单将这些APP的相关Activity添加到云控的transitionrule规则中，对这些Activity做特殊适配。 |
-| 解决2：处理平行窗口中出现的其它的Activity启动失败、闪退以及生命周期相关问题。 |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从Android 12L开始，Google引入了Activity Embedding实现平行窗口。于是MIUI 也使用了Android 12L 的 Activity Embedding 方案。<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是Google的AE方案需要APP主动适配，需要修改代码以及写配置文件才能实现平行视界。但实际上上根本没几家 APP 适配AE方案，于是为了用户体验，MIUI只能在AE的基础上修改一些Framework代码，简化APP适配流程，并且由小米为一些常用APP写配置文件。 |
+| 常见问题：部分APP未对平板设备的平行窗口模式做适配，会出现一些异常现象，需要对这些应用进行问题分析和配置修复。如常见提示页面、同意页面显示不全，有裁剪；应用权限弹窗显示不全；打开某些Activity，或横屏时，会出现闪退等问题。 |
+| 我的工作内容：<br/>(1) 了解Google Activity Embedding方式实现培训窗口的流程；<br/>(2) APP如何适配Google AE实现平行窗口；<br/>(3) 根据Top日活清单将这些APP的相关Activity添加到云控的列表中，对这些Activity做特殊适配；<br/>(4) 处理平行窗口中出现的其它的Activity启动失败、闪退以及生命周期相关问题。 |
 |                                                              |
 
 图片示例：
