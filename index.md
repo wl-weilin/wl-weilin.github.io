@@ -32,8 +32,8 @@ Android 是由 Google 开发的一种移动操作系统，广泛应用于智能�
 | [AOSP-下载并编译源码](https://www.weilin.space/2021/07/AOSP-下载并编译源码/) | 如何从Google中下载源码并编译，最后从模拟器启动 |
 | [Android编译命令与原理](https://www.weilin.space/2021/07/Android编译命令与原理/) | 常用的编译源码的命令及相关模块 |
 | [Android系统分区](https://www.weilin.space/2021/07/Android系统分区/) | 传统分区结构、A/B分区结构以及SSI分区结构 |
-| Android.bp解析-研究中 |  |
-| make全编译执行过程-待上传 |  |
+| [Android.bp语法](https://www.weilin.space/2021/07/Android.bp语法/) | Android.bp文件的基本语法及示例 |
+| [make全编译执行过程](https://www.weilin.space/2021/07/make全编译执行过程/) | make编译的执行过程及相关文件分析 |
 
 <br/>
 
@@ -53,6 +53,7 @@ Android 是由 Google 开发的一种移动操作系统，广泛应用于智能�
 | --- | --- |
 | [消息机制原理](https://www.weilin.space/2021/11/消息机制原理/) | Android消息机制的作用、成员及实现方式 |
 | [消息机制主要类](https://www.weilin.space/2021/11/消息机制主要类/) | Hanler、Looper、Message类及其使用方式 |
+| [异步消息与同步屏障](https://www.weilin.space/2021/11/异步消息与同步屏障/) | 什么是异步消息？如何使用？同步屏障原理以及它们的应用 |
 
 <br/>
 
@@ -141,12 +142,12 @@ Android 是由 Google 开发的一种移动操作系统，广泛应用于智能�
 | WindowManager模块                                            | 简述                                                 |
 | ------------------------------------------------------------ | ---------------------------------------------------- |
 | [Window概述](https://www.weilin.space/2023/02/Window概述/)   | Activity、Window和View的区别，以及Window相关类的作用 |
-| WMS启动过程-待上传                                           | 开机时WindowManagerService的创建及初始化关键过程     |
-| Window层级树构建-待上传                                      | Android的窗口层级以及层级树的构建过程                |
+| [WMS启动过程](https://www.weilin.space/2023/02/WMS启动过程/) | 开机时WindowManagerService的创建及初始化关键过程     |
+| [窗口层级概述](https://www.weilin.space/2023/02/窗口层级概述/) | 如何查看窗口层级？窗口层级如何调整？                 |
+| [Window层级树构建](https://www.weilin.space/2023/02/Window层级树构建/) | Android的窗口层级以及层级树的构建过程                |
 | [Window-创建到显示过程1](https://www.weilin.space/2023/02/Window-创建到显示过程/) | Activity的创建过程中，Window类随Activity的创建过程   |
 | Window-创建到显示过程2-待上传                                | Window的Measure、Layout和Draw的过程                  |
 | Window-移除过程-待上传                                       | Window的消失过程                                     |
-| 布局文件解析过程                                             |                                                      |
 
 (7) Input模块
 
@@ -166,12 +167,12 @@ Android 是由 Google 开发的一种移动操作系统，广泛应用于智能�
 | [PackageManagerService 安装APK过程](https://www.weilin.space/2023/02/PKMS安装APK过程/) | 安装APK的过程中，PKMS模块如何工作                          |
 | PackageManagerService 解析Intent-待更新                      | 系统收到一个Intent请求后，PKMS如何解析该请求并找到目标组件 |
 
-| 其它-待更新         | 简述                                                         |
-| ------------------- | ------------------------------------------------------------ |
-| SurfaceFlinger-概述 | SurfaceFlinger的作用，启动流程以及其它相关流程               |
-| SystemUI            | 锁屏、通知栏、状态栏等                                       |
-| Settings            | AOSP的Settings架构：SettingsIntelligence、SettingsProvider、Settings |
-| Hook技术            |                                                              |
+| 其它-待更新                                                  | 简述                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [SurfaceFlinger-概述](https://www.weilin.space/2023/06/SurfaceFlinger-概述/) | SurfaceFlinger的作用，启动流程以及其它相关流程               |
+| SystemUI                                                     | 锁屏、通知栏、状态栏等                                       |
+| Settings                                                     | AOSP的Settings架构：SettingsIntelligence、SettingsProvider、Settings |
+| Hook技术                                                     |                                                              |
 
 # 设计模式
 
