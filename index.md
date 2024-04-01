@@ -241,7 +241,7 @@ Android 是由 Google 开发的一种移动操作系统，广泛应用于智能�
 
 | Git                                                          | 简述                                                         |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [Git 概述](https://www.weilin.space/2022/01/Git相关文件说明/) | Git分布式版本控制系统的简单介绍，以及.git文件夹下相关文件的作用 |
+| [Git 概述](https://www.weilin.space/2022/01/Git概述/)        | Git分布式版本控制系统的简单介绍，以及.git文件夹下相关文件的作用 |
 | [git config 命令](https://www.weilin.space/2022/01/git-config命令/) | 配置Git版本控制系统的配置选项。Git配置包括全局配置和仓库配置两种类型。 |
 | [git add 命令](https://www.weilin.space/2022/01/git-add-命令/) | 用于将工作目录中的文件或修改添加到Git的暂存区(Staging Area)  |
 | [git branch 命令](https://www.weilin.space/2022/01/git-branch-命令/) | 用于查看、创建、删除和管理Git仓库中的分支                    |
