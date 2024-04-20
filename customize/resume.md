@@ -44,7 +44,7 @@ typora-root-url: ./..
 | ------------------------------------------------------------ |
 | 部门：手机部-软件部-应用软件部-核心体验部-安卓框架组         |
 | 岗位：Android-Framework 软件开发工程师                       |
-| 工作内容简述：<br/>(1) 负责AMS模块的维护和开发工作，包括Activity、Service、ContentProvider及Broadcast四大组件；<br/>(2) APP开发：小米便签APP的手写笔界面SDK维护及需求处理；<br/>(3) WMS模块的维护和开发工作：如平行窗口、PC投屏、View、Config等；<br/>(4) 其它Framework相关模块：包括Input进程启动、杀进程、多任务模块、Package、Notification、SystemUI、Settings等；<br/>(5) Android稳定性相关问题，如ANR、Crash、内存泄漏、黑屏、应用卡顿等问题；<br/>(6) 其它：协助APP解决相关问题，临时处理其它代码需求，效率工具的维护及需求开发，培训应届生，组内作技术分享及输出文档等。 |
+| 工作内容简述：<br/>(1) AMS模块的维护和开发工作，包括Activity、Service、ContentProvider及Broadcast四大组件；<br/>(2) APP开发：小米便签APP的手写笔界面SDK维护及需求处理；<br/>(3) WMS模块的维护和开发工作：如窗口显示、平行窗口、View架构、Config等；<br/>(4) 其它Framework相关模块：包括Input进程启动、杀进程、多任务模块、Package、Notification、SystemUI、Settings等；<br/>(5) Android稳定性相关问题，如ANR、Crash、内存泄漏、卡顿、死机重启等问题；<br/>(6) 其它：协助APP解决相关问题，临时处理其它代码需求，效率工具的维护及需求开发，培训应届生，组内作技术分享及输出文档等。 |
 
 
 
@@ -72,7 +72,7 @@ typora-root-url: ./..
 
 窗口定制与开发，窗口层级树、窗口显示流程及Configuration等模块，主要完成以下工作：
 
-(1)  WMS相关的开发项目：多屏协同(投屏功能)，平行窗口，平行窗口反向适配、大屏模式等，以及其它保密项目。
+(1)  WMS相关的开发项目：平行窗口，平行窗口反向适配，多屏协同-投屏(稳定性相关)等，以及其它保密项目。
 
 (2)  WMS的维护及升级：用户反馈Bug修复，自动化测试生成的Bug修复，Android升级适配。
 
@@ -91,6 +91,7 @@ typora-root-url: ./..
 | 项目           | 说明                                                         |
 | -------------- | ------------------------------------------------------------ |
 | 数据统计打点   | 在手写笔界面，统计用户按下每一个按钮的使用频率               |
+| 小窗适配       | 需要根据屏幕大小折叠部分功能                                 |
 | 三方库更新适配 | 手写笔界面引入了大量小米内部三方库，需要根据这些库的更新做适配以及问题修复 |
 | 跨APP剪贴板    | 框选复制一块区域时，要求跨APP复制，需要使用Provider对外分享图片 |
 | AAR包裁剪      | 减小APK的大小                                                |
@@ -189,6 +190,10 @@ typora-root-url: ./..
 
 总之，不同的前台应用或Activity，都可以通过注册和回调的方式，由不同模块自定义相关步骤，以实现不同的效果。
 
+图片示例：
+<div style="text-align: center">
+    <img src="/wl-docs/个人简历/Resume-18.png" alt="前台APP监测.png" style="zoom:80%" />
+</div>
 <br/>
 
 (2) 解决方案
@@ -230,13 +235,35 @@ typora-root-url: ./..
 
 ### 折叠屏-相机&听筒适配
 
+适配机型为：小米 Mix Fold 2 和 小米 Mix Fold 3
+
 (1) 需求说明
 
-L18与M18差异：
-- L18：内屏无前置摄像头，进入相机APP使用前置摄像头时有提示，但在三方APP中使用前置相机则无提示；
-- M18：内屏有前置摄像头，不用提示。<br/>
+Fold 2 与 Fold 3 相机差异：
+- Fold 2：内屏无前置摄像头，进入相机APP使用前置摄像头时有提示，但在三方APP中使用前置相机则无提示；
+- Fold 3：内屏有前置摄像头，不用提示。<br/>
 
 三方APP调用相机时，需要在相机的适配层（Framework与HAL层之间）添加接口并进行判断。
+
+调用前摄的提示：
+<div style="text-align: center">
+    <img src="/wl-docs/个人简历/Resume-20.png" alt="Demo.png" style="zoom:80%" />
+</div>
+
+
+Fold 2 与Fold 3 听筒差异：
+
+- Fold 2 ：内屏无听筒，当收到来电或微信通话时需要弹出Toast提示；
+
+- Fold 3 ：内屏有听筒，不用提示。
+
+ 
+
+收到来电后的提示：
+<div style="text-align: center">
+    <img src="/wl-docs/个人简历/Resume-21.png" alt="Demo.png" style="zoom:60%" />
+</div>
+
 
 <br/>
 
@@ -267,15 +294,22 @@ L18与M18差异：
 
 <br/>
 
-(2) 解决方案<br/>
-&emsp;&emsp;正常情况下投屏时由于Display（物理屏和虚拟屏）的切换，会导致Activity流转时重新执行生命周期onCreate()、onStart()和onResume()，因此会出现投屏过程中的重新加载、闪屏、卡顿等问题。<br/>
+(2) 需要解决的问题<br/>
+
+&emsp;&emsp;AMS需要解决其中的Activity在屏幕中流转时的Relaunch问题。也就是投屏时由于Display（物理屏和虚拟屏）的切换，会导致Activity流转时重新执行生命周期onCreate()、onStart()和onResume()，因此会出现投屏过程中的重新加载、闪屏、卡顿等问题。
+
 &emsp;&emsp;本项目需处理的是Activity在不同的Display之间流转时，使Activity不执行生命周期方法，而是执行onConfigurationChanged()流程，避免投屏过程中的闪屏问题以及其它稳定性问题。
 
 <br/>
 
 (3) 我的工作<br/>
-- system端ActivityRecord：判断Display变化时的configChanged值，之后通过相关返回值判断使之调用到APP端。
-- APP端Activity：当Configuration方面的回调调用到APP端时，判断displayId，使APP端不再走生命周期回调，避免了闪屏等问题。
+
+&emsp;&emsp;正常情况下Config改变，为避免Activity重走生命周期，都要配置相关的android:configChanges属性。
+&emsp;&emsp;而投屏时Activity的流转导致的Display的改变，Android中并没有这样的属性配置，并且也做不到每个APP都适配，所以需要在Framework中进行适配。
+
+需要在系统端和APP做如下修改：
+- system端ActivityRecord：判断当前Display变化是否是因为投屏导致的，如果是则不会走Relaunch流程。
+- APP端Activity：在performActivityConfigurationChanged()中，检测到ConfigChange是由于投屏时流转导致的（通过displayId和包名判断），则shouldReportChange = true，之后会执行onConfigurationChanged()。
 
 <br/>
 
@@ -364,7 +398,7 @@ L18与M18差异：
 
 <br/>
 
-(4)应用启动白名单管理
+(4) 应用启动白名单管理
 
 &emsp;&emsp;AOSP和MIUI在启动应用时，针对一些非正常情况下启动的APP，会拦截该APP的启动。但实际情况中部分APP被会导致用户体验较差，因此新增白名单管理机制，将不需要被拦截的APP添加到该名单中。
 
